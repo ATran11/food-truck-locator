@@ -24,6 +24,9 @@ import "@reach/combobox/styles.css";
 import mapStyles from "./mapStyles";
 
 const libraries = ["places"];
+
+const google = window.google;
+
 const mapContainerStyle = {
     height: "100vh",
     width: "100vw",
@@ -103,7 +106,8 @@ function App() {
                 onClick = {() => {
                     setSelected(marker);
                 }}
-                />
+                animation={google.maps.Animation.DROP}
+            />
             ))}
 
             {selected ? (
@@ -142,7 +146,7 @@ function Locate({ panTo }) {
                 () => null
             );
         }}>
-            <img src="locateMe.gif" alt="compass" />
+            <img src="LocateMe.png" alt="compass" />
         </button>
     );
 }
