@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { Dropdown, Option } from "./Dropdown";
+
 import {
     GoogleMap,
     useLoadScript,
@@ -21,12 +23,10 @@ import {
 
 import { formatRelative } from "date-fns";
 import "@reach/combobox/styles.css";
-import mapStyles from "./mapStyles";
+import pandemicStyle from "./mapStyles";
+import apocalypseStyle from "./mapStyles2";
 
 const libraries = ["places"];
-
-const google = window.google;
-
 const mapContainerStyle = {
     height: "100vh",
     width: "100vw",
@@ -37,11 +37,23 @@ const mapContainerStyle = {
     lng: -81.200454
 };
 
+const google = window.google;
+
 const options = {
-    styles: mapStyles,
+    styles: pandemicStyle, 
     disableDefaultUI: true,
     zoomControl: true,
-  };
+};
+
+const ampstyl = [pandemicStyle, apocalypseStyle];
+
+// const options2 = {
+//    styles: apocalyseStyle,
+//    disableDefaultUI: true,
+//    zoomControl: true,
+// };
+
+const styleDex = -1;
 
 function App() {
     const {isLoaded, loadError} = useLoadScript({
@@ -78,13 +90,16 @@ function App() {
 
     return (<div>
         <h1>
-            <span role = "img" aria-label = "hot_dog_truck">🌭</span>
+            <span role = "img" aria-label = "hot_dog">🌭</span>
             Food On The Move{" "}
-            <span role = "img" aria-label = "hot_dog_truck">🚚</span>
+            <span role = "img" aria-label = "truck">🚚</span>
         </h1>
-
+        
         <Search panTo={panTo} />
         <Locate panTo={panTo} />
+        <Favorite/>
+        <ChooseStyle />
+        
 
         <GoogleMap 
             mapContainerStyle = {mapContainerStyle} 
@@ -109,7 +124,7 @@ function App() {
                     setSelected(marker);
                 }}
                 animation={google.maps.Animation.DROP}
-            />
+                />
             ))}
 
             {selected ? (
@@ -204,6 +219,45 @@ function Search({ panTo }) {
     );
 }
 
+function ChooseStyle() {
+    const [optionValue, setOptionValue] = useState("");
 
+    const selections = [pandemicStyle, apocalypseStyle];
+
+    const handleSelect = (e) => {
+        console.log(e.target.value);
+        console.log(styleDex);
+    };
+
+    
+
+    return (
+        <div className="dropdown">
+            <Dropdown
+                onChange={handleSelect}
+            >
+                <Option selected value="Change Theme" />
+                <Option id="0" value="Pandemic" 
+                    onClick = {() => {
+                        styleDex = 1;
+                        options.styles = ampstyl[styleDex-1];
+                        <GoogleMap options={options}/>
+                }}></Option>
+                <Option id="1" value="Apocalypse"
+                    onClick = {() => {
+                        styleDex = 2
+                        options.styles = ampstyl[styleDex-1];
+                        <GoogleMap options={options}/>
+                }}></Option>
+            </Dropdown>
+        </div>
+    );
+}
+
+function Favorite() {
+    return (
+        <img src = "pin.png" alt = "tack" className = "favorites"/>
+    )
+}
 
 export default App;
