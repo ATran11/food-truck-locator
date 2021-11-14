@@ -77,8 +77,10 @@ function App() {
     if (!isLoaded) return "Loading maps";
 
     return (<div>
-        <h1>Food On The Move{" "}
-            <span role = "img" aria-label = "hot_dog_truck">🌭🚚</span>
+        <h1>
+            <span role = "img" aria-label = "hot_dog_truck">🌭</span>
+            Food On The Move{" "}
+            <span role = "img" aria-label = "hot_dog_truck">🚚</span>
         </h1>
 
         <Search panTo={panTo} />
